@@ -25,18 +25,19 @@ def ntmlInt(passwd, hash_passwd, semaphore, info):
 
 if __name__ == '__main__':
     use = '''\033[35m
-  python3 ntmlintr.py -p 32ed87bdb5fdc5e9cba88547376818d4 -f password.txt
-  python3 ntmlintr.py -p 32ed87bdb5fdc5e9cba88547376818d4 -f password.txt -t 50
-  python3 ntmlintr.py -p 32ed87bdb5fdc5e9cba88547376818d4 -f password.txt -t 50 -v'''
+  python3 ntmlIntr.py -p 32ed87bdb5fdc5e9cba88547376818d4 -f password.txt
+  python3 ntmlIntr.py -p 32ed87bdb5fdc5e9cba88547376818d4 -f password.txt -t 50
+  python3 ntmlIntr.py -p 32ed87bdb5fdc5e9cba88547376818d4 -f password.txt -t 50 -v'''
     parse = argparse.ArgumentParser(usage=use)
     parse.add_argument('-p', '--ntml', type=str, help='NTML密文')
-    parse.add_argument('-f', '--file', type=argparse.FileType('r'), help='本地密码字典')
-    parse.add_argument('-t', '--thread', type=str, default=30, help='线程数')
+    parse.add_argument('-f', '--file', type=argparse.FileType('r'), help='本地明文密码字典')
+    parse.add_argument('-t', '--thread', type=str, default=30)
     parse.add_argument('-v', '--verbosity', action="store_true", help='显示爆破记录')
     args = parse.parse_args()
-    if args.ntml == None and args.file == None:
+    if args.ntml is None and args.file is None:
         parse.print_help()
     try:
+        start_time = time.time()
         semaphore = threading.BoundedSemaphore(args.thread)
         hash_pass = args.ntml
         pass_list = args.file.readlines()
@@ -49,7 +50,7 @@ if __name__ == '__main__':
                 t.start()
         while threading.active_count() != 1:
             pass
+        print("\033[36m[>>>] 执行完成!\033[0m")
     except:
-        parse.print_help()
-
+        pass
 
